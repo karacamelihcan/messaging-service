@@ -1,20 +1,28 @@
 ﻿using MessagingService.API.Context;
 using MessagingService.API.Entities;
 using MessagingService.API.Models.RequestModels.Users;
+using MessagingService.API.Models.ResponseModels.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
 
 namespace MessagingService.API.Services.UserServices
 {
     public class UserService : IUserService
     {
         private readonly MessagingServiceDbContext _context;
-        public UserService(MessagingServiceDbContext context)
+        private readonly IConfiguration _configuration;
+        public UserService(MessagingServiceDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<int> AddUser(AddUserRequest request)
@@ -66,6 +74,44 @@ namespace MessagingService.API.Services.UserServices
             if (check == null)
                 return false;
             return true;
+        }
+
+        public async Task<TokenResponse> Login(LoginRequest request)
+        {
+            if(string.IsNullOrWhiteSpace(request.UserName) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return null;
+            }
+            var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.UserName && user.Password == request.Password);
+
+            if (user == null)
+                return null;
+
+            var secretKey = _configuration.GetValue<string>("JwtTokenKey");
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var singingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+
+            var tokenDesc = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName)
+                }),
+                NotBefore = DateTime.UtcNow,
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(singingKey, SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var newToken = tokenHandler.CreateToken(tokenDesc);
+            var tokenResponse = new TokenResponse
+            {
+                UserName = user.UserName,
+                ExpireTime = newToken.ValidTo,
+                Token = tokenHandler.WriteToken(newToken)
+            };
+
+            return tokenResponse;
         }
     }
 }

@@ -10,6 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MessagingService.API.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 namespace MessagingService.API
 {
     public class Startup
@@ -38,16 +42,31 @@ namespace MessagingService.API
                options.UseInMemoryDatabase("MessagingServiceDB");
            });
 
-
             services.AddScoped<MessagingServiceDbContext>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
 
-            
-           // services.AddAutoMapper(option =>
-           //{
-           //    option.AddProfile<MappingProfile>();
-           //});
+
+            string key = Configuration.GetValue<string>("JwtTokenKey");
+            byte[] keyvalue = Encoding.UTF8.GetBytes(key);
+
+            services.AddAuthentication(auth =>
+           {
+               auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+               auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+           })
+                .AddJwtBearer(jwt =>
+                {
+                    jwt.RequireHttpsMetadata = true;
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(keyvalue),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
             
             
             
@@ -59,7 +78,11 @@ namespace MessagingService.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwaggerUi3();
+                app.UseSwaggerUi3(option =>
+                {
+                    option.DocumentTitle = "MessagingService.API";
+                    
+                });                 
                 app.UseOpenApi();
             }
 

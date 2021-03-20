@@ -1,4 +1,4 @@
-﻿using MessagingService.API.Models;
+﻿using MessagingService.API.Models.ResponseModels.Messages;
 using MessagingService.API.Models.RequestModels.Messages;
 using System;
 using System.Collections.Generic;

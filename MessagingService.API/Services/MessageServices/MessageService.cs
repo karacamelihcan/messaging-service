@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MessagingService.API.Context;
-using MessagingService.API.Models;
 using MessagingService.API.Models.RequestModels.Messages;
+using MessagingService.API.Models.ResponseModels.Messages;
 using MessagingService.API.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +15,7 @@ namespace MessagingService.API.Services.MessageServices
     {
         private readonly MessagingServiceDbContext _dbContext;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+
 
         public MessageService(MessagingServiceDbContext dbContext, IUserService userService)
         {
@@ -33,7 +33,6 @@ namespace MessagingService.API.Services.MessageServices
 
             var messages = await _dbContext.Messages.Where(msg => msg.ReceiverID == userID).OrderByDescending(msg => msg.Date).ToListAsync();
 
-            // var result = messages.Select(msg => _mapper.Map<MessageView>(msg)).ToList();
 
             if (messages.Count == 0)
                 return null;

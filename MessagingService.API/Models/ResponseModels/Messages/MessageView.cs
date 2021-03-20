@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MessagingService.API.Models
+namespace MessagingService.API.Models.ResponseModels.Messages
 {
     public class MessageView
     {

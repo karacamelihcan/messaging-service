@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MessagingService.API.Context;
 using MessagingService.API.Entities;
-using MessagingService.API.Models;
+using MessagingService.API.Models.ResponseModels.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
