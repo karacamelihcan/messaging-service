@@ -37,7 +37,60 @@ namespace MessagingService.API.Services.UserServices
 
             _context.Users.Add(newUser);
 
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> BlockUser(BlockUserRequest request)
+        {
+            var kicker = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.KickerName);
+
+            if (kicker == null)
+                return 0;
+
+            var blocked = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.BlockedName);
+
+            if (blocked == null)
+                return 0;
+
+
+            _context.Blocks.Add(new BlockedEntity
+            {
+                Id = Guid.NewGuid(),
+                KickerID = kicker.ID,
+                BlockedID = blocked.ID,
+                Date = DateTime.Now
+            });
+
+            return await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<List<BlockedUserResponse>> GetBlockedsByUserName(GetBlockedRequest request)
+        {
+            var kicker = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.Username);
+
+            if (kicker == null)
+                return null;
+
+            var blockedList = await _context.Blocks.Where(block => block.KickerID == kicker.ID).OrderByDescending(block => block.Date).ToListAsync();
+
+            if (blockedList.Count == 0)
+                return null;
+
+            var result = new List<BlockedUserResponse>();
+
+            foreach (var blocked in blockedList)
+            {
+                var item = new BlockedUserResponse
+                {
+                    ID = blocked.Id,
+                    BlockedUserName = await GetUsernameById(blocked.BlockedID),
+                    Date = blocked.Date
+                };
+                result.Add(item);
+            }
+
+            return result;
         }
 
         public async Task<int> GetUserIdByUserName(string username)
@@ -68,9 +121,21 @@ namespace MessagingService.API.Services.UserServices
             return userlist;
         }
 
-        public async Task<bool> isUserNameExist(AddUserRequest request)
+        public async Task<bool> isBlocked(BlockUserRequest request)
         {
-            var check = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.UserName);
+            var kicker = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.KickerName);
+            var blocked = await _context.Users.SingleOrDefaultAsync(user => user.UserName == request.BlockedName);
+
+            var result = await _context.Blocks.SingleOrDefaultAsync(block => block.KickerID == kicker.ID && block.BlockedID == blocked.ID);
+
+            if (result == null)
+                return false;
+            return true;
+        }
+
+        public async Task<bool> isUserNameExist(string username)
+        {
+            var check = await _context.Users.SingleOrDefaultAsync(user => user.UserName == username);
             if (check == null)
                 return false;
             return true;

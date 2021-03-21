@@ -11,11 +11,15 @@ namespace MessagingService.API.Services.UserServices
     public interface IUserService
     {
         Task<int> AddUser(AddUserRequest request);
-        Task<bool> isUserNameExist(AddUserRequest request);
+        Task<bool> isUserNameExist(string username);
         List<UserEntity> GetUsers();
         Task<int> GetUserIdByUserName(string username);
         Task<string> GetUsernameById(int ID);
         Task<TokenResponse> Login(LoginRequest request);
+        Task<int> BlockUser(BlockUserRequest request);
+        Task<bool> isBlocked(BlockUserRequest request);
+        Task<List<BlockedUserResponse>> GetBlockedsByUserName(GetBlockedRequest request);
+        
 
     }
 }

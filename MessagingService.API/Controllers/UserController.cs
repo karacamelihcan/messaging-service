@@ -12,7 +12,7 @@ namespace MessagingService.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,8 +21,8 @@ namespace MessagingService.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet(Name = nameof(GetUsers))]
-        public IActionResult GetUsers()
+        [HttpGet(Name = nameof(Get))]
+        public IActionResult Get()
         {
             var users = _userService.GetUsers();
             if (users == null)
@@ -38,13 +38,60 @@ namespace MessagingService.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            if (await _userService.isUserNameExist(request))
+            if (await _userService.isUserNameExist(request.UserName))
                 return BadRequest();
 
             if (await _userService.AddUser(request) == 0)
                 return BadRequest();
 
             return Ok();
+        }
+
+
+        [HttpPost(Name = nameof(Block))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Block([FromBody] BlockUserRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if ((!await _userService.isUserNameExist(request.KickerName) || (! await _userService.isUserNameExist(request.BlockedName))))
+                return NotFound("There is no such a username");
+                
+                
+            var isBlocked = await _userService.isBlocked(request);
+
+            if (isBlocked)
+                return BadRequest("You have already blocked this user");
+
+            if (await _userService.BlockUser(request) == 0)
+                return NotFound("Your username or the username you want to block could not be found.");
+
+            return Ok();
+        }
+
+
+        [HttpGet(Name =nameof(GetBlockedRequest))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetBlockedUser([FromQuery] GetBlockedRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (!await _userService.isUserNameExist(request.Username))
+                return NotFound("There is no such a username");
+
+
+            var result = await _userService.GetBlockedsByUserName(request);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 }

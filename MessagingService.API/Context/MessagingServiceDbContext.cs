@@ -16,5 +16,6 @@ namespace MessagingService.API.Context
         
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
+        public DbSet<BlockedEntity> Blocks { get; set; }
     }
 }

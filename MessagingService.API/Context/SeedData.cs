@@ -51,6 +51,33 @@ namespace MessagingService.API.Context
                     Password = "bkelmas"
 
                 });
+                dbContext.Users.Add(new UserEntity
+                {
+                    ID = 5,
+                    Name = "Fake",
+                    Surname = "User 1",
+                    UserName = "fake1",
+                    Password = "1234"
+
+                });
+                dbContext.Users.Add(new UserEntity
+                {
+                    ID = 6,
+                    Name = "Fake",
+                    Surname = "User 2",
+                    UserName = "fake2",
+                    Password = "1234"
+
+                });
+                dbContext.Users.Add(new UserEntity
+                {
+                    ID = 7,
+                    Name = "Fake",
+                    Surname = "User 3",
+                    UserName = "fake3",
+                    Password = "1234"
+
+                });
             }
 
             if (!dbContext.Messages.Any())
@@ -154,8 +181,76 @@ namespace MessagingService.API.Context
 
             }
 
+            if (!dbContext.Blocks.Any())
+            {
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 1,
+                    BlockedID = 5,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 1,
+                    BlockedID = 6,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 1,
+                    BlockedID = 7,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 2,
+                    BlockedID = 5,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 2,
+                    BlockedID = 6,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 2,
+                    BlockedID = 7,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 3,
+                    BlockedID = 5,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 3,
+                    BlockedID = 6,
+                    Date = DateTime.Now
+                });
+                dbContext.Blocks.Add(new BlockedEntity
+                {
+                    Id = Guid.NewGuid(),
+                    KickerID = 3,
+                    BlockedID = 7,
+                    Date = DateTime.Now
+                });
+            }
+
             await dbContext.SaveChangesAsync();
 
         }
     }
 }
+
