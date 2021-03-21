@@ -1,5 +1,6 @@
 ﻿using MessagingService.API.Models.RequestModels.Users;
 using MessagingService.API.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MessagingService.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -23,6 +25,7 @@ namespace MessagingService.API.Controllers
         [ProducesResponseType(200)] //OK
         [ProducesResponseType(400)] //Unauthorized
         [ProducesResponseType(401)] //BadRequest
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)

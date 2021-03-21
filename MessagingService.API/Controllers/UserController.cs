@@ -1,5 +1,6 @@
 ﻿using MessagingService.API.Models.RequestModels.Users;
 using MessagingService.API.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace MessagingService.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -31,6 +33,7 @@ namespace MessagingService.API.Controllers
         [HttpPost(Name = nameof(Add))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [AllowAnonymous]
         public async Task<IActionResult> Add([FromBody] AddUserRequest request)
         {
             if (!ModelState.IsValid)

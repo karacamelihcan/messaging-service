@@ -98,7 +98,7 @@ namespace MessagingService.API.Services.UserServices
                 {
                     new Claim(ClaimTypes.Name, user.UserName)
                 }),
-                NotBefore = DateTime.UtcNow,
+                NotBefore = DateTime.Now,
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = new SigningCredentials(singingKey, SecurityAlgorithms.HmacSha256Signature)
             };
@@ -107,7 +107,7 @@ namespace MessagingService.API.Services.UserServices
             var tokenResponse = new TokenResponse
             {
                 UserName = user.UserName,
-                ExpireTime = newToken.ValidTo,
+                ExpireTime = tokenDesc.Expires ?? DateTime.Now.AddHours(1),
                 Token = tokenHandler.WriteToken(newToken)
             };
 

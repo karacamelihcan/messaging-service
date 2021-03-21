@@ -35,7 +35,7 @@ namespace MessagingService.API
            });
 
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddSwaggerDocument();
+            
 
             services.AddDbContext<MessagingServiceDbContext>(options =>
            {
@@ -67,8 +67,8 @@ namespace MessagingService.API
                         ValidateAudience = false
                     };
                 });
-            
-            
+
+            services.AddSwaggerDocumentation();
             
         }
 
@@ -78,17 +78,15 @@ namespace MessagingService.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwaggerUi3(option =>
-                {
-                    option.DocumentTitle = "MessagingService.API";
-                    
-                });                 
-                app.UseOpenApi();
+                app.UseSwaggerDocumentation();
+                
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
