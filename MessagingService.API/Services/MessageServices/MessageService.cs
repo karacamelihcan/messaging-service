@@ -25,22 +25,29 @@ namespace MessagingService.API.Services.MessageServices
             
         }
 
-        public async Task<List<MessageView>> GetMessagesByUsername(GetMessagesRequest request)
+        public async Task<List<MessageView>> GetMessages(string username, string sendername)
         {
-            var userID = await _userService.GetUserIdByUserName(request.Username);
+            var messages = _dbContext.Messages.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                var userID = await _userService.GetUserIdByUserName(username);
+                messages = messages.Where(msg => msg.ReceiverID == userID);
 
-            if (userID == 0)
+            }
+            else
                 return null;
 
-            var messages = await _dbContext.Messages.Where(msg => msg.ReceiverID == userID).OrderByDescending(msg => msg.Date).ToListAsync();
+            if (!string.IsNullOrWhiteSpace(sendername))
+            {
+                var senderID = await _userService.GetUserIdByUserName(sendername);
+                messages = messages.Where(msg => msg.SenderID == senderID);
+            }
 
-
-            if (messages.Count == 0)
-                return null;
+            var messagesList = await messages.OrderByDescending(msg => msg.Date).ToListAsync();
 
             var result = new List<MessageView>();
 
-            foreach (var msg in messages)
+            foreach (var msg in messagesList)
             {
                 var msgview = new MessageView
                 {

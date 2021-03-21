@@ -9,7 +9,7 @@ namespace MessagingService.API.Services.MessageServices
 {
     public interface IMessageService
     {
-        Task<List<MessageView>> GetMessagesByUsername(GetMessagesRequest request);
+        Task<List<MessageView>> GetMessages(string username,string sendername);
         Task<int> Send(SendMessageRequest request);
     }
 }

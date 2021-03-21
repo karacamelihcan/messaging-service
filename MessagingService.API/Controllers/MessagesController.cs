@@ -5,6 +5,7 @@ using MessagingService.API.Services.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,19 +28,19 @@ namespace MessagingService.API.Controllers
 
 
 
-        [HttpGet(Name = nameof(GetMessagesByUserName))]
+        [HttpGet(Name = nameof(GetMessages))]
         [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetMessagesByUserName([FromQuery] GetMessagesRequest request)
+        public async Task<IActionResult> GetMessages([FromQuery] string username,[FromQuery] string sendername)
         {
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            var msg = await _service.GetMessagesByUsername(request);
+            var msg = await _service.GetMessages(username,sendername);
 
             if (msg == null)
-                return NotFound("There is no such username or message yet.");
+                return NoContent();
 
             return Ok(msg);
 
@@ -68,5 +69,7 @@ namespace MessagingService.API.Controllers
 
             return Ok();
         }
+
+
     }
 }
