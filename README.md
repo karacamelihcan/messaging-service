@@ -17,8 +17,8 @@ Closed endpoints require a valid Token to be included in the header of the reque
 
 Each endpoint manipulates or displays information related to the User whose Token is provided with the request:
 
--   [Get]()       :  `GET /api/user/get`
--  [Block]()  :  `POST /api/user/block`
+-   [Get](https://github.com/karacamelihcan/messaging-service/blob/main/user/Get.md)       :  `GET /api/user/get`
+-  [Block](https://github.com/karacamelihcan/messaging-service/blob/main/user/Block.md)  :  `POST /api/user/block`
 - [Get Blocked User]()  :  `GET /api/user/getblockeduser`
 
 
