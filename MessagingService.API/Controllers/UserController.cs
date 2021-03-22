@@ -34,7 +34,7 @@ namespace MessagingService.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [AllowAnonymous]
-        public async Task<IActionResult> Add([FromBody] AddUserRequest request)
+        public async Task<IActionResult> Register([FromBody] AddUserRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
