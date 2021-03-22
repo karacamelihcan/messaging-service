@@ -6,7 +6,7 @@ Open endpoints require no Authentication
 
  - [register](https://github.com/karacamelihcan/messaging-service/blob/main/user/Register.md) : `POST /api/user/register`
  
- -   [auth](https://github.com/jamescooke/restapidocs/blob/master/examples/login.md)  :  `POST /api/auth/`
+ -   [auth](https://github.com/karacamelihcan/messaging-service/blob/main/user/auth-login.md)  :  `POST /api/auth/`
  
 
 ## Endpoints that require Authentication
