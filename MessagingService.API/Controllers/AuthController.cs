@@ -33,7 +33,7 @@ namespace MessagingService.API.Controllers
             var result = await _service.Login(request);
 
             if (result == null)
-                return Unauthorized();
+                return BadRequest();
 
             return Ok(result);
 
