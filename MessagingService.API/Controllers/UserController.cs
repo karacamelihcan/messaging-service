@@ -30,7 +30,7 @@ namespace MessagingService.API.Controllers
             return Ok(users);
         }
 
-        [HttpPost(Name = nameof(Add))]
+        [HttpPost(Name = nameof(Register))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [AllowAnonymous]
