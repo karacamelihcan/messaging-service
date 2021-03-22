@@ -1,5 +1,5 @@
 
-# Block
+# Get Blocked User
 
 Used to block a user who you don't want receive message from. 
 
