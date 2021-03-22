@@ -19,7 +19,7 @@ Each endpoint manipulates or displays information related to the User whose Toke
 
 -   [Get](https://github.com/karacamelihcan/messaging-service/blob/main/user/Get.md)       :  `GET /api/user/get`
 -  [Block](https://github.com/karacamelihcan/messaging-service/blob/main/user/Block.md)  :  `POST /api/user/block`
-- [Get Blocked User]()  :  `GET /api/user/getblockeduser`
+- [Get Blocked User](https://github.com/karacamelihcan/messaging-service/blob/main/user/Get%20Block%20User.md)  :  `GET /api/user/getblockeduser`
 
 
 ### Messages related
