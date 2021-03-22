@@ -28,5 +28,5 @@ Endpoints for viewing and manipulating the Messages that the Authenticated User 
 
 -   [Get Messages]()       :  `GET /api/messages/getmessages`
 
--  [Send]()  :  `POST /api/messages/send`
+-  [Send](https://github.com/karacamelihcan/messaging-service/blob/main/messages/Send.md)  :  `POST /api/messages/send`
 
