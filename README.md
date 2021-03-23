@@ -26,7 +26,7 @@ Each endpoint manipulates or displays information related to the User whose Toke
 
 Endpoints for viewing and manipulating the Messages that the Authenticated User has permissions to access.
 
--   [Get Messages]()       :  `GET /api/messages/getmessages`
+-   [Get Messages](https://github.com/karacamelihcan/messaging-service/blob/main/messages/Get%20Messages.md)       :  `GET /api/messages/getmessages`
 
 -  [Send](https://github.com/karacamelihcan/messaging-service/blob/main/messages/Send.md)  :  `POST /api/messages/send`
 
